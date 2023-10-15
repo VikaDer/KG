@@ -3,6 +3,7 @@ import glob
 from moviepy import *
 import moviepy
 from moviepy.editor import *
+import os
 
 path1 = glob.glob('assets/*.jpg')
 path2 = glob.glob('assets/*.mp4')
@@ -23,7 +24,7 @@ audio = cv2.VideoCapture(audio_path)
 ret, audio_frames = audio.read()
 """
 
-out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), Fps1, points)
+out = cv2.VideoWriter('tem_output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), Fps1, points)
 
 
 for img in path_all:
@@ -56,12 +57,13 @@ for img in path_all:
 cap.release()
 out.release()
 
-audio_path = 'assets/music.mp3'
-result = VideoFileClip("output.mp4")
+
+result = VideoFileClip("tem_output.mp4")
 duration = result.duration
-audio = AudioFileClip('music.mp3')
+audio = AudioFileClip('assets/music.mp3')
 audio = audio.subclip(0, duration)
 audio = audio.volumex(0.5)
 
 result.audio = CompositeAudioClip([audio])
-result.write_videofile('output1.mp4')
+result.write_videofile('result.mp4')
+os.remove('tem_output.mp4')

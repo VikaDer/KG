@@ -13,7 +13,7 @@ cv_img = []
 width = 1600
 height = 900
 points = (width, height)
-fps = 60
+Fps1 = 30
 volume = 0.5
 
 """for player in path3:
@@ -22,13 +22,15 @@ audio = cv2.VideoCapture(audio_path)
 ret, audio_frames = audio.read()
 """
 
-out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), fps, points)
+out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), Fps1, points)
+
+
 for img in path_all:
     n = cv2.imread(img)
     cv_img.append(n)
     if(img in path1):
         n = cv2.resize(n, points, interpolation= cv2.INTER_LINEAR)
-        for i in range(120):
+        for i in range(Fps1*2):
             out.write(n)
         #cv2.imshow('Image', n)
         #cv2.waitKey(0)
@@ -39,7 +41,7 @@ for img in path_all:
         #while(cap.isOpened()):
         ret = True
         num_of_img = 0
-        while(ret == True and num_of_img<360):
+        while(ret == True and num_of_img<Fps1*6):
             num_of_img+=1
             ret, frame = cap.read()
             frame = cv2.resize(frame, points, interpolation= cv2.INTER_LINEAR)
@@ -49,11 +51,17 @@ for img in path_all:
                #break
         print('Video')
 
-for player in path3:
-    audio_path = player
-#path_output = glob.glob("output.mp4")
+#for player in path3:
+#    audio_path = player
+cap.release()
+out.release()
+
+audio_path = 'assets/music.mp3'
 result = VideoFileClip("output.mp4")
-audio = AudioFileClip(audio_path)
-audio = audio.volumex(volume)
-result.set_audio(audio)
-cv2.waitKey(0)
+duration = result.duration
+audio = AudioFileClip('music.mp3')
+audio = audio.subclip(0, duration)
+audio = audio.volumex(0.5)
+
+result.audio = CompositeAudioClip([audio])
+result.write_videofile('output1.mp4')

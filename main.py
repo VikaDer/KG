@@ -8,6 +8,7 @@ path1 = glob.glob('assets/*.jpg')
 path2 = glob.glob('assets/*.mp4')
 path3 = glob.glob('assets/*.mp3')
 path_all = path1 + path2
+path_all.sort()
 
 cv_img = []
 width = 1600
@@ -26,9 +27,8 @@ out = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), Fps1, point
 
 
 for img in path_all:
-    n = cv2.imread(img)
-    cv_img.append(n)
     if(img in path1):
+        n = cv2.imread(img)
         n = cv2.resize(n, points, interpolation= cv2.INTER_LINEAR)
         for i in range(Fps1*2):
             out.write(n)
